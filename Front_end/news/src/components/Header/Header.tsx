@@ -42,7 +42,7 @@ const Header = () => {
             <div style={{display: "flex", alignItems: "center", gap: 12}}>
                 {user ? (
                     <>
-        <span style={{color: "#1890ff", fontWeight: "bold"}}>
+        <span style={{color: "#0E6830", fontWeight: "bold"}}>
             👤 {user.name || user.username || "Người dùng"}
         </span>
                         <button
