@@ -3,7 +3,7 @@ import Parser from 'rss-parser';
 import cors from 'cors';
 import axios from 'axios';
 import cheerio from 'cheerio';
-import 'antd/dist/reset.css'; // Phiên bản mới hoặc 'antd/dist/antd.css' cho phiên bản cũ
+
 
 const app = express();
 const port = 4000;
