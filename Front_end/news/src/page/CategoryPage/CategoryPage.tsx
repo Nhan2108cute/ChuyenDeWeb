@@ -95,7 +95,7 @@ function CategoryPage() {
                         </div>
                     ) : (
                         <div style={{width: "90%", height: "auto", margin: " 20px auto"}}>
-                            <NewsItem title={feed[0].title} description={feed[0].contentSnippet} imageUrl={imageUrl} newsUrl={feed[0].link.replace("https://dantri.com.vn/", "")}/>
+                            <Item title={feed[0].title} description={feed[0].contentSnippet} imageUrl={imageUrl} newsUrl={feed[0].link.replace("https://dantri.com.vn/", "")} style={{width:"100%", height: "100%"}} styleBody={{fontSize: "130%"}} col1={9} col2={15}/>
                         </div>
                     )
                     }
@@ -115,7 +115,17 @@ function CategoryPage() {
                             <Col xl={6} lg={8} md={8}key={index} style={{margin: "0 auto"}}>
                                 {windowSize.width > 768 ? (
                                     <div style={{width: "90%", height: 300, margin: " 20px auto"}}>
-                                        <NewsItem title={item.title} description={""} imageUrl={imageUrl} newsUrl={item.link.replace("https://dantri.com.vn/", "")}/>
+                                        <Item
+                                            title={item.title}
+                                            description={""}
+                                            imageUrl={imageUrl}
+                                            newsUrl={item.link.replace("https://dantri.com.vn/", "")}
+                                            style={{ width: "100%", height: "100%" }}
+                                            styleBody={{}}
+                                            col1={9}
+                                            col2={15}
+                                        />
+
                                     </div>
                                 ) : (
                                     <div style={{marginBottom: "15px"}}>
@@ -135,8 +145,17 @@ function CategoryPage() {
                         }
                         return (
                             <Col xl={6} lg={8} md={8} key={index} style={{margin: "0 auto"}}>
-                                <div style={{  width: "90%", height: 350 , margin: " 20px auto"}}>
-                                    <NewsItem title={item.title} description={""} imageUrl={imageUrl} newsUrl={item.link.replace("https://dantri.com.vn/"+nameCate, "")}/>
+                                <div style={{  width: "90%", height: 350 , margin: " 10px auto"}}>
+                                    <Item
+                                        title={item.title}
+                                        description={""}
+                                        imageUrl={imageUrl}
+                                        newsUrl={item.link.replace("https://dantri.com.vn/", "")}
+                                        style={{ width: "100%", height: "100%" }}
+                                        styleBody={{}}
+                                        col1={30}
+                                        col2={30}
+                                    />
                                 </div>
                             </Col>
                         );
