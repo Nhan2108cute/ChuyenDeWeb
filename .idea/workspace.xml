@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="da46d46a-aaf8-4e8c-b854-f6d81ec912e1" name="Changes" comment="fix detailPage" />
+    <list default="true" id="da46d46a-aaf8-4e8c-b854-f6d81ec912e1" name="Changes" comment="fix detailPage">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -58,7 +63,7 @@
     "nodejs_package_manager_path": "npm",
     "npm.start.executor": "Run",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "ts.external.directory.path": "D:\\Project Front End Real\\Front_end\\news\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "C:\\CD_WEB_Front_end\\ChuyenDeWeb\\Front_end\\news\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -113,6 +118,7 @@
       <workItem from="1747653145020" duration="1196000" />
       <workItem from="1747725636259" duration="3502000" />
       <workItem from="1747795266310" duration="15209000" />
+      <workItem from="1747820375169" duration="1042000" />
     </task>
     <task id="LOCAL-00001" summary="index">
       <option name="closed" value="true" />
