@@ -5,7 +5,10 @@ import {RSSFeed} from "../../service/rssService";
 import {useLoaderData} from "react-router";
 import Item from "../../components/Item";
 import {NewsItem} from "../../components/NewsItem";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import AdBanner from "../../components/Banner/AdBanner";
+import GoogleAdsense from "../../components/Banner/GoogleAdsense";
+
 
 export async function loadRss({params}: any) {
     let url = "";
@@ -162,6 +165,8 @@ function CategoryPage() {
                     })
                 }
             </Row>
+            <AdBanner />
+            <GoogleAdsense />
             <Caption title="Mới nhất"/>
             <Row>
                 {
