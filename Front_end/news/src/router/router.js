@@ -4,6 +4,7 @@ import CategoryPage, { loadRss } from "../page/CategoryPage/CategoryPage";
 import HomePage from "../page/HomePage/HomePage";
 import DetailPage, { loadUrl } from "../page/DetailPage/DetailPage";
 import RegisterPage from "../page/LoginAndResigter/RegisterPage";
+import SearchPage from '../components/Header/SearchPage';
 
 export const router = createBrowserRouter([
     {
@@ -19,15 +20,25 @@ export const router = createBrowserRouter([
                 element: <CategoryPage />,
                 loader: loadRss,
             },
+
             {
                 path: ':category/:articleSlug',
                 element: <DetailPage />,
                 loader: loadUrl,
             },
             {
+                path: "/:category/:newsUrl",
+                element: <DetailPage />,
+            },
+
+
+            { path: "search", element: <SearchPage /> },
+
+            {
                 path: 'register',           // 👈 thêm route đăng ký
                 element: <RegisterPage />,
             }
+
         ]
     }
 ]);

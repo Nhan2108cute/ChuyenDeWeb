@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Button, Form, Input, DatePicker, message } from "antd";
 import { useAuth } from "../../context/AuthContext"; // chỉnh đúng path
-
+import axios from "axios";
 type AuthModalProps = {
     visible: boolean;
     onClose: () => void;
@@ -12,20 +12,41 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
     const [form] = Form.useForm();
 
     const { login } = useAuth();
-    const onFinish = (values: any) => {
-        console.log(`${type.toUpperCase()} form data:`, values);
-        if (type === "login") {
-            login({
-                username: values.username,
-                name: "Nhân", // hoặc tạm thời bỏ dòng này
-            });
-            message.success("Đăng nhập thành công!");
-        } else {
-            message.success("Đăng ký thành công!");
-        }
-        form.resetFields();
-        onClose();
-    };
+    const onFinish = async (values: any) => {
+        try {
+            if (type === "login") {
+                const response = await axios.post("http://localhost:8081/api/auth/login", {
+                    username: values.username,
+                    password: values.password,
+                });
+
+                // Nếu backend trả về token hoặc dữ liệu user
+                login({
+                    username: values.username,
+                    name: response.data.name || "Người dùng",
+                });
+                message.success("Đăng nhập thành công!");
+            } else {
+                await axios.post("http://localhost:8081/api/auth/register", {
+                    username: values.username,
+                    password: values.password,
+                    email: values.email,
+                    phone: values.phone,
+                    birthday: values.birthday.format("YYYY-MM-DD"), // chuyển moment thành string
+                });
+
+                message.success("Đăng ký thành công!");
+            }
+
+            form.resetFields();
+            onClose();
+        }catch (error: any) {
+                const data = error.response?.data;
+                const errorMsg = typeof data === "string" ? data : (data?.message || JSON.stringify(data) || "Đã xảy ra lỗi!");
+                message.error(errorMsg);
+            }
+
+        };
 
 
     const handleForgotPassword = () => {

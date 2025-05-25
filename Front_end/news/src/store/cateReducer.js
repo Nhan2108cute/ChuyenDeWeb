@@ -1,14 +1,21 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+
 const initState = {
     cates: []
-}
+};
+
 export const cateSlice = createSlice({
-    name : "cate",
+    name: "cate",
     initialState: initState,
     reducers: {
-        loadCate : (state , action) => {
-            state.cates.push(...action.payload)
+        loadCate: (state, action) => {
+            state.cates = action.payload;  // Thay thế luôn, tránh trùng lặp
         }
     }
-})
-export const {loadCate} = cateSlice.actions;
+});
+
+// Export action creator
+export const { loadCate } = cateSlice.actions;
+
+// BỔ SUNG: export reducer để dùng trong store
+export default cateSlice.reducer;
