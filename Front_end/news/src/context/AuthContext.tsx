@@ -1,13 +1,11 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-// 🧠 Bước 1: Định nghĩa kiểu User
 interface User {
     username: string;
     name?: string;
     email?: string;
 }
 
-// 🧠 Bước 2: Định nghĩa kiểu cho AuthContext
 interface AuthContextType {
     user: User | null;
     login: (userInfo: User) => void;
@@ -17,14 +15,20 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null); // 👈 dùng User thay vì string
+    // Lấy user từ localStorage lúc khởi tạo state
+    const [user, setUser] = useState<User | null>(() => {
+        const storedUser = localStorage.getItem("user");
+        return storedUser ? JSON.parse(storedUser) : null;
+    });
 
     const login = (userInfo: User) => {
-        setUser(userInfo); // 👈 nhận object User
+        setUser(userInfo);
+        localStorage.setItem("user", JSON.stringify(userInfo)); // lưu vào localStorage
     };
 
     const logout = () => {
         setUser(null);
+        localStorage.removeItem("user"); // xóa khỏi localStorage
     };
 
     return (

@@ -6,3 +6,8 @@ export const store = configureStore({
         cate: cateSlice.reducer,
     }
 })
+// Kiểu state toàn bộ store
+export type RootState = ReturnType<typeof store.getState>;
+
+// Kiểu dispatch
+export type AppDispatch = typeof store.dispatch;
