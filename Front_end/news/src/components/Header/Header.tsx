@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import AuthModal from "../../page/LoginAndResigter/AuthModal";
 import { useAuth } from "../../context/AuthContext";
 import { message } from "antd";
@@ -7,10 +7,22 @@ import { message } from "antd";
 const Header = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [authType, setAuthType] = useState<"login" | "register">("login");
-    const [searchTerm, setSearchTerm] = useState("");
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // Lấy query param 'query' từ URL
+    const queryParam = new URLSearchParams(location.search).get("query") || "";
+
+    // State searchTerm khởi tạo từ queryParam
+    const [searchTerm, setSearchTerm] = useState(queryParam);
+
+    // Đồng bộ searchTerm khi URL query thay đổi
+    useEffect(() => {
+        setSearchTerm(queryParam);
+    }, [queryParam]);
 
     const { user, logout } = useAuth();
-    const navigate = useNavigate();
 
     const openModal = (type: "login" | "register") => {
         setAuthType(type);
@@ -29,7 +41,9 @@ const Header = () => {
     const handleSearch = () => {
         if (searchTerm.trim() !== "") {
             navigate(`/search?query=${encodeURIComponent(searchTerm.trim())}`);
-            setSearchTerm("");
+            // KHÔNG reset searchTerm ở đây nữa,
+            // để giữ nguyên giá trị trong input khi chuyển trang
+            // setSearchTerm("");
         }
     };
 
@@ -93,9 +107,9 @@ const Header = () => {
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 {user ? (
                     <>
-            <span style={{ color: "#0E6830", fontWeight: "bold" }}>
-              👤 {user.name || user.username || "Người dùng"}
-            </span>
+                        <span style={{ color: "#0E6830", fontWeight: "bold" }}>
+                            👤 {user.name || user.username || "Người dùng"}
+                        </span>
                         <button
                             style={{
                                 padding: "6px 12px",
