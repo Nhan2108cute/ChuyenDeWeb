@@ -4,7 +4,6 @@ import Caption from "../../components/Caption/Caption";
 import {RSSFeed} from "../../service/rssService";
 import {useLoaderData} from "react-router";
 import Item from "../../components/Item";
-import {NewsItem} from "../../components/NewsItem";
 import React, {useEffect, useState} from "react";
 import AdBanner from "../../components/Banner/AdBanner";
 import GoogleAdsense from "../../components/Banner/GoogleAdsense";

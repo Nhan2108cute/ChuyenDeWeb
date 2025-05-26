@@ -2,6 +2,8 @@ import React from "react";
 import { Modal, Button, Form, Input, DatePicker, message } from "antd";
 import { useAuth } from "../../context/AuthContext"; // chỉnh đúng path
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 type AuthModalProps = {
     visible: boolean;
     onClose: () => void;
@@ -10,8 +12,9 @@ type AuthModalProps = {
 
 const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
     const [form] = Form.useForm();
-
     const { login } = useAuth();
+    const navigate = useNavigate();
+
     const onFinish = async (values: any) => {
         try {
             if (type === "login") {
@@ -19,20 +22,36 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
                     username: values.username,
                     password: values.password,
                 });
+                console.log("Login response data:", response.data);
 
-                // Nếu backend trả về token hoặc dữ liệu user
+                const { username, accountType } = response.data;
+
+                // Gọi hàm login trong context và truyền cả accountType
+                console.log("Logging in user:", {
+                    username: values.username,
+
+                });
                 login({
                     username: values.username,
-                    name: response.data.name || "Người dùng",
+                    accountType,
                 });
+
                 message.success("Đăng nhập thành công!");
+
+                // Redirect dựa vào loại tài khoản
+                if (accountType === 0) {
+                    navigate("/admin-dashboard");  // Trang admin
+                } else {
+                    navigate("/");   // Trang user thường hoặc premium
+                }
             } else {
                 await axios.post("http://localhost:8081/api/auth/register", {
                     username: values.username,
                     password: values.password,
                     email: values.email,
                     phone: values.phone,
-                    birthday: values.birthday.format("YYYY-MM-DD"), // chuyển moment thành string
+                    birthday: values.birthday.format("YYYY-MM-DD"),
+                    accountType: 1, // 👈 thêm dòng này
                 });
 
                 message.success("Đăng ký thành công!");
@@ -40,14 +59,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
 
             form.resetFields();
             onClose();
-        }catch (error: any) {
-                const data = error.response?.data;
-                const errorMsg = typeof data === "string" ? data : (data?.message || JSON.stringify(data) || "Đã xảy ra lỗi!");
-                message.error(errorMsg);
-            }
-
-        };
-
+        } catch (error: any) {
+            const data = error.response?.data;
+            const errorMsg = typeof data === "string" ? data : (data?.message || JSON.stringify(data) || "Đã xảy ra lỗi!");
+            message.error(errorMsg);
+        }
+    };
 
     const handleForgotPassword = () => {
         message.info("Tính năng 'Quên mật khẩu' đang được phát triển");
@@ -72,10 +89,23 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
                 <Form.Item
                     name="password"
                     label="Mật khẩu"
-                    rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
+                    rules={[
+                        { required: true, message: "Vui lòng nhập mật khẩu!" },
+                        {
+                            min: 8,
+                            message: "Mật khẩu phải có ít nhất 8 ký tự!",
+                        },
+                        {
+                            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+                            message:
+                                "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số!",
+                        },
+                    ]}
+                    hasFeedback
                 >
                     <Input.Password />
                 </Form.Item>
+
 
                 {type === "login" && (
                     <div style={{ textAlign: "right", marginBottom: 16 }}>

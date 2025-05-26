@@ -5,7 +5,7 @@ import HomePage from "../page/HomePage/HomePage";
 import DetailPage, { loadUrl } from "../page/DetailPage/DetailPage";
 import RegisterPage from "../page/LoginAndResigter/RegisterPage";
 import SearchPage from '../components/Header/SearchPage';
-
+import AdminDashboard from'../components/AminDashboard/AdminDashboard'
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -37,7 +37,12 @@ export const router = createBrowserRouter([
             {
                 path: 'register',           // 👈 thêm route đăng ký
                 element: <RegisterPage />,
+            },
+            {
+                path:'admin-dashboard',
+                element:<AdminDashboard />
             }
+
 
         ]
     }
