@@ -11,13 +11,9 @@ const Header = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Lấy query param 'query' từ URL
     const queryParam = new URLSearchParams(location.search).get("query") || "";
-
-    // State searchTerm khởi tạo từ queryParam
     const [searchTerm, setSearchTerm] = useState(queryParam);
 
-    // Đồng bộ searchTerm khi URL query thay đổi
     useEffect(() => {
         setSearchTerm(queryParam);
     }, [queryParam]);
@@ -41,10 +37,25 @@ const Header = () => {
     const handleSearch = () => {
         if (searchTerm.trim() !== "") {
             navigate(`/search?query=${encodeURIComponent(searchTerm.trim())}`);
-            // KHÔNG reset searchTerm ở đây nữa,
-            // để giữ nguyên giá trị trong input khi chuyển trang
-            // setSearchTerm("");
         }
+    };
+
+    // Hàm xử lý click vào tên user
+    const handleUserClick = () => {
+        if (!user) {
+            // Nếu chưa đăng nhập thì mở modal login
+            openModal("login");
+            return;
+        }
+
+        // Giả sử user có thuộc tính role để phân biệt admin
+        if (user?.accountType === 0) {
+            // 1 là admin, ví dụ bạn định nghĩa thế
+            navigate("/admin-dashboard");
+        } else {
+            navigate("/user-info"); // hoặc trang thông tin user
+        }
+
     };
 
     return (
@@ -107,9 +118,23 @@ const Header = () => {
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 {user ? (
                     <>
-                        <span style={{ color: "#0E6830", fontWeight: "bold" }}>
+                        {/* Biến phần tên user thành nút có thể click */}
+                        <button
+                            onClick={handleUserClick}
+                            style={{
+                                background: "none",
+                                border: "none",
+                                color: "#0E6830",
+                                fontWeight: "bold",
+                                cursor: "pointer",
+                                padding: 0,
+                                fontSize: 16,
+                            }}
+                            title="Xem trang quản lý hoặc thông tin người dùng"
+                        >
                             👤 {user.name || user.username || "Người dùng"}
-                        </span>
+                        </button>
+
                         <button
                             style={{
                                 padding: "6px 12px",

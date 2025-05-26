@@ -4,6 +4,7 @@ interface User {
     username: string;
     name?: string;
     email?: string;
+    accountType?: number;  // thêm đây
 }
 
 interface AuthContextType {
