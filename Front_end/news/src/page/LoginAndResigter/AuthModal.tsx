@@ -3,6 +3,7 @@ import { Modal, Button, Form, Input, DatePicker, message } from "antd";
 import { useAuth } from "../../context/AuthContext"; // chỉnh đúng path
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import {useNavigate} from "react-router-dom";
 
 type AuthModalProps = {
     visible: boolean;
@@ -14,6 +15,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
     const [form] = Form.useForm();
     const { login } = useAuth();
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const onFinish = async (values: any) => {
         try {
@@ -22,14 +24,21 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
                     username: values.username,
                     password: values.password,
                 });
+                const { username, accountType } = response.data;
 
                 login({
                     username: values.username,
-                    name: response.data.name || t("default_user"),
+                    accountType,
                 });
 
                 message.success(t("login_success"));
-            } else {
+                if (accountType === 0) {
+                    navigate("/admin-dashboard");  // Trang admin
+                } else {
+                    navigate("/");   // Trang user thường hoặc premium
+                }
+            }
+             else {
                 await axios.post("http://localhost:8081/api/auth/register", {
                     username: values.username,
                     password: values.password,

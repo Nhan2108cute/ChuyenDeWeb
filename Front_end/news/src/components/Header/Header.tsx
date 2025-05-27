@@ -136,7 +136,7 @@ const Header = () => {
                             }}
                             title="Xem trang quản lý hoặc thông tin người dùng"
                         >
-                            {t("greeting", { name: user.name || user.username || "Người dùng" })}
+                            👤 {user.name || user.username || "Người dùng"}
                         </button>
 
                         <button
