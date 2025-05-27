@@ -28,5 +28,7 @@
   "caption": {
     "moi-nhat": "Latest News"
   },
-  "login_success": "Login sucessfully"
+  "login_success": "Login sucessfully",
+  "logoutt": "Logout sucessfully ",
+  "logout": "Logout"
 }

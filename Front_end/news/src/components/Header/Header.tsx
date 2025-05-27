@@ -37,7 +37,7 @@ const Header = () => {
 
     const handleLogout = () => {
         logout();
-        message.success(t("logout") + " thành công!");
+        message.success(t("logoutt"));
         navigate("/category/trang-chu");
     };
 

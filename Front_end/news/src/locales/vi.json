@@ -28,7 +28,8 @@
   "caption": {
     "moi-nhat": "Tin tức mới nhất"
   },
-  "login_success": "Đăng nhập thành công"
-
+  "login_success": "Đăng nhập thành công",
+  "logoutt": "Đăng xuất thành công ",
+  "logout": "Đăng Xuất"
 }
 
