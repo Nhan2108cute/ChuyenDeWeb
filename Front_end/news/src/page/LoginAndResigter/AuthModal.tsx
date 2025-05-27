@@ -2,7 +2,8 @@ import React from "react";
 import { Modal, Button, Form, Input, DatePicker, message } from "antd";
 import { useAuth } from "../../context/AuthContext"; // chỉnh đúng path
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import {useNavigate} from "react-router-dom";
 
 type AuthModalProps = {
     visible: boolean;
@@ -13,6 +14,7 @@ type AuthModalProps = {
 const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
     const [form] = Form.useForm();
     const { login } = useAuth();
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const onFinish = async (values: any) => {
@@ -22,57 +24,49 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
                     username: values.username,
                     password: values.password,
                 });
-                console.log("Login response data:", response.data);
-
                 const { username, accountType } = response.data;
 
-                // Gọi hàm login trong context và truyền cả accountType
-                console.log("Logging in user:", {
-                    username: values.username,
-
-                });
                 login({
                     username: values.username,
                     accountType,
                 });
 
-                message.success("Đăng nhập thành công!");
-
-                // Redirect dựa vào loại tài khoản
+                message.success(t("login_success"));
                 if (accountType === 0) {
                     navigate("/admin-dashboard");  // Trang admin
                 } else {
                     navigate("/");   // Trang user thường hoặc premium
                 }
-            } else {
+            }
+             else {
                 await axios.post("http://localhost:8081/api/auth/register", {
                     username: values.username,
                     password: values.password,
                     email: values.email,
                     phone: values.phone,
                     birthday: values.birthday.format("YYYY-MM-DD"),
-                    accountType: 1, // 👈 thêm dòng này
                 });
 
-                message.success("Đăng ký thành công!");
+                message.success(t("register_success"));
             }
 
             form.resetFields();
             onClose();
         } catch (error: any) {
             const data = error.response?.data;
-            const errorMsg = typeof data === "string" ? data : (data?.message || JSON.stringify(data) || "Đã xảy ra lỗi!");
+            const errorMsg =
+                typeof data === "string" ? data : data?.message || JSON.stringify(data) || t("error_generic");
             message.error(errorMsg);
         }
     };
 
     const handleForgotPassword = () => {
-        message.info("Tính năng 'Quên mật khẩu' đang được phát triển");
+        message.info(t("forgot_password_message"));
     };
 
     return (
         <Modal
-            title={type === "login" ? "Đăng nhập" : "Đăng ký"}
+            title={type === "login" ? t("login") : t("register")}
             open={visible}
             onCancel={onClose}
             footer={null}
@@ -80,25 +74,21 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
             <Form form={form} layout="vertical" onFinish={onFinish}>
                 <Form.Item
                     name="username"
-                    label="Tên đăng nhập"
-                    rules={[{ required: true, message: "Vui lòng nhập tên đăng nhập!" }]}
+                    label={t("username")}
+                    rules={[{ required: true, message: t("username_required") }]}
                 >
                     <Input />
                 </Form.Item>
 
                 <Form.Item
                     name="password"
-                    label="Mật khẩu"
+                    label={t("password")}
                     rules={[
-                        { required: true, message: "Vui lòng nhập mật khẩu!" },
-                        {
-                            min: 8,
-                            message: "Mật khẩu phải có ít nhất 8 ký tự!",
-                        },
+                        { required: true, message: t("password_required") },
+                        { min: 8, message: t("password_min") },
                         {
                             pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
-                            message:
-                                "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số!",
+                            message: t("password_pattern"),
                         },
                     ]}
                     hasFeedback
@@ -110,7 +100,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
                 {type === "login" && (
                     <div style={{ textAlign: "right", marginBottom: 16 }}>
                         <Button type="link" onClick={handleForgotPassword} style={{ padding: 0 }}>
-                            Quên mật khẩu?
+                            {t("forgot_password")}
                         </Button>
                     </div>
                 )}
@@ -119,26 +109,26 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
                     <>
                         <Form.Item
                             name="phone"
-                            label="Số điện thoại"
-                            rules={[{ required: true, message: "Vui lòng nhập số điện thoại!" }]}
+                            label={t("phone")}
+                            rules={[{ required: true, message: t("phone_required") }]}
                         >
                             <Input />
                         </Form.Item>
 
                         <Form.Item
                             name="birthday"
-                            label="Ngày sinh"
-                            rules={[{ required: true, message: "Vui lòng chọn ngày sinh!" }]}
+                            label={t("birthday")}
+                            rules={[{ required: true, message: t("birthday_required") }]}
                         >
                             <DatePicker style={{ width: "100%" }} />
                         </Form.Item>
 
                         <Form.Item
                             name="email"
-                            label="Email"
+                            label={t("email")}
                             rules={[
-                                { required: true, message: "Vui lòng nhập email!" },
-                                { type: "email", message: "Email không hợp lệ!" },
+                                { required: true, message: t("email_required") },
+                                { type: "email", message: t("email_invalid") },
                             ]}
                         >
                             <Input />
@@ -148,7 +138,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
 
                 <Form.Item>
                     <Button type="primary" htmlType="submit" block>
-                        {type === "login" ? "Đăng nhập" : "Đăng ký"}
+                        {type === "login" ? t("login") : t("register")}
                     </Button>
                 </Form.Item>
             </Form>

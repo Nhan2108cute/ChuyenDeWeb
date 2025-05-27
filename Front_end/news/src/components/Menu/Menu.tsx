@@ -1,11 +1,12 @@
-import {WrapperLink, WrapperUl} from "./style";
-import {useDispatch} from "react-redux";
-import {useEffect, useState} from "react";
-import {RSSFeed} from "../../service/rssService";
-import {loadCate} from "../../store/cateReducer";
-
+import { WrapperLink, WrapperUl } from "./style";
+import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { RSSFeed } from "../../service/rssService";
+import { loadCate } from "../../store/cateReducer";
+import { useTranslation } from "react-i18next";
 
 function Menu() {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const [trangChu, setTrangChu] = useState(null);
     const [kinhDoanh, setKinhDoanh] = useState(null);
@@ -27,6 +28,7 @@ function Menu() {
         }
         setFeed();
     }, []);
+
     useEffect(() => {
         if (trangChu && kinhDoanh && xaHoi && theGioi && giaiTri && batDongSan && theThao) {
             dispatch(loadCate([
@@ -39,31 +41,18 @@ function Menu() {
                 { name: "Thể thao", items: theThao },
             ]));
         }
-    }, [trangChu,kinhDoanh, xaHoi, theGioi, giaiTri, batDongSan, theThao, dispatch]);
+    }, [trangChu, kinhDoanh, xaHoi, theGioi, giaiTri, batDongSan, theThao, dispatch]);
+
     return (
-        <div style={{background:"#fff", }}>
+        <div style={{ background: "#fff" }}>
             <WrapperUl>
-                <li>
-                    <WrapperLink to ={"/category/trang-chu"}>TRANG CHỦ</WrapperLink>
-                </li>
-                <li>
-                    <WrapperLink to = {"/category/kinh-doanh"}>KINH DOANH</WrapperLink>
-                </li>
-                <li>
-                    <WrapperLink to = {"/category/xa-hoi"}>XÃ HỘI</WrapperLink>
-                </li>
-                <li>
-                    <WrapperLink to = {"/category/the-gioi"}>THẾ GIỚI</WrapperLink>
-                </li>
-                <li>
-                    <WrapperLink to = {"/category/giai-tri"}>GIẢI TRÍ</WrapperLink>
-                </li>
-                <li>
-                    <WrapperLink to = {"/category/bat-dong-san"}>BẤT ĐỘNG SẢN</WrapperLink>
-                </li>
-                <li>
-                    <WrapperLink to ={"/category/the-thao"}>THỂ THAO</WrapperLink>
-                </li>
+                <li><WrapperLink to={"/category/trang-chu"}>{t("categories.trang-chu")}</WrapperLink></li>
+                <li><WrapperLink to={"/category/kinh-doanh"}>{t("categories.kinh-doanh")}</WrapperLink></li>
+                <li><WrapperLink to={"/category/xa-hoi"}>{t("categories.xa-hoi")}</WrapperLink></li>
+                <li><WrapperLink to={"/category/the-gioi"}>{t("categories.the-gioi")}</WrapperLink></li>
+                <li><WrapperLink to={"/category/giai-tri"}>{t("categories.giai-tri")}</WrapperLink></li>
+                <li><WrapperLink to={"/category/bat-dong-san"}>{t("categories.bat-dong-san")}</WrapperLink></li>
+                <li><WrapperLink to={"/category/the-thao"}>{t("categories.the-thao")}</WrapperLink></li>
             </WrapperUl>
         </div>
     );
