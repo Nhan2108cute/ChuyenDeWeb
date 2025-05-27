@@ -4,57 +4,50 @@ import Caption from "../../components/Caption/Caption";
 import {RSSFeed} from "../../service/rssService";
 import {useLoaderData} from "react-router";
 import Item from "../../components/Item";
+import {NewsItem} from "../../components/NewsItem";
 import React, {useEffect, useState} from "react";
 import AdBanner from "../../components/Banner/AdBanner";
 import GoogleAdsense from "../../components/Banner/GoogleAdsense";
-
+import { useTranslation } from "react-i18next";
 
 export async function loadRss({params}: any) {
     let url = "";
-    let cateName = "";
     switch (params.nameCate) {
         case "trang-chu":
             url = "https://dantri.com.vn/rss/home.rss";
-            cateName = "Trang chủ";
             break;
         case "kinh-doanh":
             url = "https://dantri.com.vn/rss/kinh-doanh.rss";
-            cateName = "Kinh doanh";
             break;
         case "xa-hoi":
             url = "https://dantri.com.vn/rss/xa-hoi.rss";
-            cateName = "Xã hội";
             break;
         case "the-gioi":
             url = "https://dantri.com.vn/rss/the-gioi.rss";
-            cateName = "Thế giới";
             break;
         case "giai-tri":
             url = "https://dantri.com.vn/rss/giai-tri.rss";
-            cateName = "Giải trí";
             break;
         case "bat-dong-san":
             url = "https://dantri.com.vn/rss/bat-dong-san.rss";
-            cateName = "Bất động sản";
             break;
         case "the-thao":
             url = "https://dantri.com.vn/rss/the-thao.rss";
-            cateName = "Thể thao";
             break;
         default:
             return url;
     }
-    const data = [];
-    const feed = await RSSFeed(url);
-    data.push(feed);
-    data.push(cateName);
-    return data;
+    const data = await RSSFeed(url);
+    return [data, params.nameCate]; // giữ lại nameCate để dịch bên trong component
 }
 
+
 function CategoryPage() {
+    const {t} = useTranslation();
     const data: any = useLoaderData();
     const feed = data[0];
     const nameCate = data[1];
+    const categoryTitle = t(`categories.${nameCate}`);
     // Create a new DOM parser
     const parser = new DOMParser();
     let imageUrl: any = "";
@@ -90,7 +83,7 @@ function CategoryPage() {
         <WrapperContain>
             <Row>
                 <Col span={24}>
-                    <WrapperCateName>{nameCate}</WrapperCateName>
+                    <WrapperCateName>{categoryTitle}</WrapperCateName>
                     {windowSize.width > 768 ? (
                         <div>
                             <Item title={feed[0].title} description={feed[0].contentSnippet} imageUrl={imageUrl}
@@ -179,7 +172,7 @@ function CategoryPage() {
                 height="120px"
             />
             <GoogleAdsense/>
-            <Caption title="Mới nhất"/>
+            <Caption title={t("caption.moi-nhat")}/>
             <Row>
                 {
                     isSmallScreen ? (
@@ -245,6 +238,7 @@ function CategoryPage() {
                 }
             </Row>
         </WrapperContain>
+
     );
 }
 

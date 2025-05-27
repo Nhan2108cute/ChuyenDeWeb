@@ -1,6 +1,31 @@
 {
-  "welcome": "Welcome to Dân Trí",
   "login": "Login",
-  "logout": "Logout",
-  "register": "Register"
+  "register": "Register",
+  "username": "Username",
+  "password": "Password",
+  "forgot_password": "Forgot password?",
+  "phone": "Phone",
+  "birthday": "Birthday",
+  "email": "Email",
+  "searchPlaceholder": "Search for article title...",
+  "search": "Search",
+  "username_required": "Please enter username!",
+  "password_required": "Please enter password!",
+  "password_min": "Password must be at least 8 characters!",
+  "password_pattern": "Password must contain at least 1 uppercase, 1 lowercase, and 1 number!",
+  "phone_required": "Please enter phone number!",
+  "birthday_required": "Please choose birthday!",
+  "email_required": "Please enter email!",
+  "email_invalid": "Invalid email!",
+  "forgot_password_message": "Feature is being updated!",
+  "categories.trang-chu": "Home",
+  "categories.kinh-doanh": "Business",
+  "categories.xa-hoi": "Society",
+  "categories.the-gioi": "The World",
+  "categories.giai-tri": "Entertainment",
+  "categories.bat-dong-san": "Real Estate",
+  "categories.the-thao": "Sports",
+  "caption": {
+    "moi-nhat": "Latest News"
+  }
 }

@@ -3,8 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import AuthModal from "../../page/LoginAndResigter/AuthModal";
 import { useAuth } from "../../context/AuthContext";
 import { message } from "antd";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
+    const { t, i18n } = useTranslation();
+
+    console.log(i18n);
+    console.log(typeof i18n.changeLanguage);
+
     const [modalVisible, setModalVisible] = useState(false);
     const [authType, setAuthType] = useState<"login" | "register">("login");
 
@@ -30,9 +36,9 @@ const Header = () => {
     };
 
     const handleLogout = () => {
-        logout(); // Xoá token/context
-        message.success("Đăng xuất thành công, hẹn gặp lại bạn!");
-        navigate("/category/trang-chu"); // Điều hướng về trang chủ
+        logout();
+        message.success(t("logout") + " thành công!");
+        navigate("/category/trang-chu");
     };
 
     const handleSearch = () => {
@@ -41,22 +47,21 @@ const Header = () => {
         }
     };
 
-    // Hàm xử lý click vào tên user
     const handleUserClick = () => {
         if (!user) {
-            // Nếu chưa đăng nhập thì mở modal login
             openModal("login");
             return;
         }
 
-        // Giả sử user có thuộc tính role để phân biệt admin
         if (user?.accountType === 0) {
-            // 1 là admin, ví dụ bạn định nghĩa thế
             navigate("/admin-dashboard");
         } else {
-            navigate("/user-info"); // hoặc trang thông tin user
+            navigate("/user-info");
         }
+    };
 
+    const toggleLanguage = () => {
+        i18n.changeLanguage(i18n.language === "vi" ? "en" : "vi");
     };
 
     return (
@@ -70,7 +75,6 @@ const Header = () => {
                 borderBottom: "1px solid #ddd",
             }}
         >
-            {/* Logo */}
             <div
                 style={{ fontWeight: "bold", fontSize: 24, color: "#0E6830", cursor: "pointer" }}
                 onClick={() => navigate("/category/trang-chu")}
@@ -78,17 +82,14 @@ const Header = () => {
                 Báo Chí
             </div>
 
-            {/* Thanh tìm kiếm */}
             <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
                 <input
                     type="text"
-                    placeholder="Tìm kiếm tiêu đề bài viết..."
+                    placeholder={t("searchPlaceholder")}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            handleSearch();
-                        }
+                        if (e.key === "Enter") handleSearch();
                     }}
                     style={{
                         padding: "6px 12px",
@@ -111,15 +112,17 @@ const Header = () => {
                         fontWeight: "600",
                     }}
                 >
-                    Tìm
+                    {t("search")}
                 </button>
             </div>
 
-            {/* Đăng nhập/Đăng xuất */}
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <button onClick={toggleLanguage} style={{ fontSize: 20, border: "none", background: "none", cursor: "pointer" }}>
+                    {i18n.language === "vi" ? "🇺🇸" : "🇻🇳"}
+                </button>
+
                 {user ? (
                     <>
-                        {/* Biến phần tên user thành nút có thể click */}
                         <button
                             onClick={handleUserClick}
                             style={{
@@ -133,7 +136,7 @@ const Header = () => {
                             }}
                             title="Xem trang quản lý hoặc thông tin người dùng"
                         >
-                            👤 {user.name || user.username || "Người dùng"}
+                            {t("greeting", { name: user.name || user.username || "Người dùng" })}
                         </button>
 
                         <button
@@ -148,7 +151,7 @@ const Header = () => {
                             }}
                             onClick={handleLogout}
                         >
-                            Đăng xuất
+                            {t("logout")}
                         </button>
                     </>
                 ) : (
@@ -165,7 +168,7 @@ const Header = () => {
                             }}
                             onClick={() => openModal("login")}
                         >
-                            Đăng nhập
+                            {t("login")}
                         </button>
 
                         <button
@@ -180,13 +183,12 @@ const Header = () => {
                             }}
                             onClick={() => openModal("register")}
                         >
-                            Đăng ký
+                            {t("register")}
                         </button>
                     </>
                 )}
             </div>
 
-            {/* Modal đăng nhập/đăng ký */}
             <AuthModal visible={modalVisible} onClose={closeModal} type={authType} />
         </header>
     );
