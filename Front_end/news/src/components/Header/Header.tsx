@@ -30,8 +30,9 @@ const Header = () => {
     };
 
     const handleLogout = () => {
+        logout(); // Xoá token/context
         message.success("Đăng xuất thành công, hẹn gặp lại bạn!");
-        logout();
+        navigate("/category/trang-chu"); // Điều hướng về trang chủ
     };
 
     const handleSearch = () => {
@@ -74,7 +75,7 @@ const Header = () => {
                 style={{ fontWeight: "bold", fontSize: 24, color: "#0E6830", cursor: "pointer" }}
                 onClick={() => navigate("/category/trang-chu")}
             >
-                Dân Trí
+                Báo Chí
             </div>
 
             {/* Thanh tìm kiếm */}
