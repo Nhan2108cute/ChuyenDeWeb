@@ -17,7 +17,7 @@ function AdBanner({
                   }: AdBannerProps) {
     const [visible, setVisible] = useState(true);
 
-    if (!visible) return null; // Nếu banner bị ẩn thì không render gì
+    if (!visible) return null;
 
     return (
         <div

@@ -62,15 +62,15 @@ function CategoryPage() {
     const isSmallScreen = windowSize.width < 1200;
     const parser = new DOMParser();
 
-    // 🟢 Tách 1 bài nổi bật đầu tiên
+    // Bài báo nổi bật
     const topArticle = feed[0];
     const topImage = parser.parseFromString(topArticle.content, 'text/html')
         .querySelector('img')?.getAttribute('src') || "";
 
-    // 🟢 4 bài tiếp theo
+    //  4 bài tiếp theo
     const midArticles = feed.slice(1, 5);
 
-    // 🟢 Các bài còn lại phân trang bắt đầu từ index = 5
+    // Phân trang từ bài báo 5
     const paginatedArticles = feed.slice(5);
     const startIndex = (currentPage - 1) * pageSize;
     const currentArticles = paginatedArticles.slice(startIndex, startIndex + pageSize);
@@ -94,7 +94,7 @@ function CategoryPage() {
                 </Col>
             </Row>
 
-            {/* 🟢 Hiển thị 4 bài tiếp theo */}
+            {/* Hiển thị 4 bài báo kế tiếp */}
             <Row>
                 {midArticles.map((item: any, index: number) => {
                     const image = parser.parseFromString(item.content, 'text/html')
@@ -115,14 +115,10 @@ function CategoryPage() {
                 })}
             </Row>
 
-            {/* 🟢 Quảng cáo */}
+            {/* Quảng cáo */}
             <AdBanner adUrl="https://www.facebook.com/nhanstp2108" imageUrl="/img.png" height="120px"/>
             <GoogleAdsense/>
-
-            {/* 🟢 Tiêu đề "Mới nhất" */}
             <Caption title={t("caption.moi-nhat")}/>
-
-            {/* 🟢 Các bài viết phân trang */}
             <Row>
                 {currentArticles.map((item: any, index: number) => {
                     const image = parser.parseFromString(item.content, 'text/html')
@@ -144,7 +140,7 @@ function CategoryPage() {
                 })}
             </Row>
 
-            {/* 🟢 Phân trang */}
+            {/* Phân trang */}
             <Row justify="center" style={{margin: "20px 0"}}>
                 <Pagination
                     current={currentPage}
