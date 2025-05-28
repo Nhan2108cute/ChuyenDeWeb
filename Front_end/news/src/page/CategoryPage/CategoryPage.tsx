@@ -1,14 +1,13 @@
 import {WrapperCateName, WrapperContain} from "./Style";
-import {Col, Row} from "antd";
+import {Col, Row, Pagination} from "antd";
 import Caption from "../../components/Caption/Caption";
 import {RSSFeed} from "../../service/rssService";
 import {useLoaderData} from "react-router";
 import Item from "../../components/Item";
-import {NewsItem} from "../../components/NewsItem";
 import React, {useEffect, useState} from "react";
 import AdBanner from "../../components/Banner/AdBanner";
 import GoogleAdsense from "../../components/Banner/GoogleAdsense";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 
 export async function loadRss({params}: any) {
     let url = "";
@@ -38,9 +37,8 @@ export async function loadRss({params}: any) {
             return url;
     }
     const data = await RSSFeed(url);
-    return [data, params.nameCate]; // giữ lại nameCate để dịch bên trong component
+    return [data, params.nameCate];
 }
-
 
 function CategoryPage() {
     const {t} = useTranslation();
@@ -48,197 +46,115 @@ function CategoryPage() {
     const feed = data[0];
     const nameCate = data[1];
     const categoryTitle = t(`categories.${nameCate}`);
-    // Create a new DOM parser
-    const parser = new DOMParser();
-    let imageUrl: any = "";
-    const doc = parser.parseFromString(feed[0].content, 'text/html');
-    const imgElement = doc.querySelector('img');
-    if (imgElement) {
-        imageUrl = imgElement.getAttribute('src');
-    }
 
-    const [windowSize, setWindowSize] = useState({
-        width: window.innerWidth,
-        height: window.innerHeight,
-    });
+    const [windowSize, setWindowSize] = useState({ width: window.innerWidth });
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 5; // Số bài mỗi trang phân trang
 
     useEffect(() => {
         const handleResize = () => {
-            setWindowSize({
-                width: window.innerWidth,
-                height: window.innerHeight,
-            });
+            setWindowSize({ width: window.innerWidth });
         };
-
         window.addEventListener('resize', handleResize);
-
-        // Cleanup function to remove event listener when component unmounts
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []); // Empty dependency array ensures that effect runs only once after mount
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const isSmallScreen = windowSize.width < 1200;
+    const parser = new DOMParser();
+
+    // 🟢 Tách 1 bài nổi bật đầu tiên
+    const topArticle = feed[0];
+    const topImage = parser.parseFromString(topArticle.content, 'text/html')
+        .querySelector('img')?.getAttribute('src') || "";
+
+    // 🟢 4 bài tiếp theo
+    const midArticles = feed.slice(1, 5);
+
+    // 🟢 Các bài còn lại phân trang bắt đầu từ index = 5
+    const paginatedArticles = feed.slice(5);
+    const startIndex = (currentPage - 1) * pageSize;
+    const currentArticles = paginatedArticles.slice(startIndex, startIndex + pageSize);
+
     return (
         <WrapperContain>
             <Row>
                 <Col span={24}>
                     <WrapperCateName>{categoryTitle}</WrapperCateName>
-                    {windowSize.width > 768 ? (
-                        <div>
-                            <Item title={feed[0].title} description={feed[0].contentSnippet} imageUrl={imageUrl}
-                                  newsUrl={feed[0].link.replace("https://dantri.com.vn/", "")}
-                                  style={{width: "100%", height: "100%"}} styleBody={{fontSize: "130%"}} col1={9}
-                                  col2={15}/>
-                        </div>
-                    ) : (
-                        <div style={{width: "90%", height: "auto", margin: " 20px auto"}}>
-                            <Item title={feed[0].title} description={feed[0].contentSnippet} imageUrl={imageUrl}
-                                  newsUrl={feed[0].link.replace("https://dantri.com.vn/", "")}
-                                  style={{width: "100%", height: "100%"}} styleBody={{fontSize: "130%"}} col1={9}
-                                  col2={15}/>
-                        </div>
-                    )
-                    }
-
+                    <div style={{width: isSmallScreen ? "90%" : "100%", margin: "20px auto"}}>
+                        <Item
+                            title={topArticle.title}
+                            description={topArticle.contentSnippet}
+                            imageUrl={topImage}
+                            newsUrl={topArticle.link.replace("https://dantri.com.vn/", "")}
+                            style={{width: "100%", height: "100%"}}
+                            styleBody={{fontSize: "130%"}}
+                            col1={9} col2={15}
+                        />
+                    </div>
                 </Col>
             </Row>
-            <Row>
-                {isSmallScreen ?
-                    feed.slice(1, 4).map((item: any, index: any) => {
-                        let imageUrl: any = "";
-                        const doc = parser.parseFromString(item.content, 'text/html');
-                        const imgElement = doc.querySelector('img');
-                        if (imgElement) {
-                            imageUrl = imgElement.getAttribute('src');
-                        }
-                        return (
-                            <Col xl={6} lg={8} md={8} key={index} style={{margin: "0 auto"}}>
-                                {windowSize.width > 768 ? (
-                                    <div style={{width: "90%", height: 300, margin: " 20px auto"}}>
-                                        <Item
-                                            title={item.title}
-                                            description={""}
-                                            imageUrl={imageUrl}
-                                            newsUrl={item.link.replace("https://dantri.com.vn/", "")}
-                                            style={{width: "100%", height: "100%"}}
-                                            styleBody={{}}
-                                            col1={9}
-                                            col2={15}
-                                        />
 
-                                    </div>
-                                ) : (
-                                    <div style={{marginBottom: "15px"}}>
-                                        <Item title={item.title} description={""} imageUrl={imageUrl}
-                                              newsUrl={item.link.replace("https://dantri.com.vn/", "")}
-                                              style={{width: "100%", height: "100%"}} styleBody={""} col1={9}
-                                              col2={15}/>
-                                    </div>
-                                )
-                                }
-                            </Col>
-                        );
-                    }) :
-                    feed.slice(1, 5).map((item: any, index: any) => {
-                        let imageUrl: any = "";
-                        const doc = parser.parseFromString(item.content, 'text/html');
-                        const imgElement = doc.querySelector('img');
-                        if (imgElement) {
-                            imageUrl = imgElement.getAttribute('src');
-                        }
-                        return (
-                            <Col xl={6} lg={8} md={8} key={index} style={{margin: "0 auto"}}>
-                                <div style={{width: "90%", height: 350, margin: " 10px auto"}}>
-                                    <Item
-                                        title={item.title}
-                                        description={""}
-                                        imageUrl={imageUrl}
-                                        newsUrl={item.link.replace("https://dantri.com.vn/", "")}
-                                        style={{width: "100%", height: "100%"}}
-                                        styleBody={{}}
-                                        col1={30}
-                                        col2={30}
-                                    />
-                                </div>
-                            </Col>
-                        );
-                    })
-                }
+            {/* 🟢 Hiển thị 4 bài tiếp theo */}
+            <Row>
+                {midArticles.map((item: any, index: number) => {
+                    const image = parser.parseFromString(item.content, 'text/html')
+                        .querySelector('img')?.getAttribute('src') || "";
+                    return (
+                        <Col xl={6} lg={8} md={8} sm={24} key={index} style={{margin: "10px auto"}}>
+                            <Item
+                                title={item.title}
+                                description={""}
+                                imageUrl={image}
+                                newsUrl={item.link.replace("https://dantri.com.vn/", "")}
+                                style={{width: "100%", height: "100%"}}
+                                styleBody={{}}
+                                col1={30} col2={30}
+                            />
+                        </Col>
+                    );
+                })}
             </Row>
-            <AdBanner
-                adUrl="https://www.facebook.com/nhanstp2108"
-                imageUrl="/img.png" // hoặc "https://example.com/banner.jpg"
-                height="120px"
-            />
+
+            {/* 🟢 Quảng cáo */}
+            <AdBanner adUrl="https://www.facebook.com/nhanstp2108" imageUrl="/img.png" height="120px"/>
             <GoogleAdsense/>
+
+            {/* 🟢 Tiêu đề "Mới nhất" */}
             <Caption title={t("caption.moi-nhat")}/>
+
+            {/* 🟢 Các bài viết phân trang */}
             <Row>
-                {
-                    isSmallScreen ? (
-                        feed.slice(4).map((item: any, index: any) => {
-                            let imageUrl: any = "";
-                            const doc = parser.parseFromString(item.content, 'text/html');
-                            const imgElement = doc.querySelector('img');
-                            if (imgElement) {
-                                imageUrl = imgElement.getAttribute('src');
-                            }
-                            return (
-                                <Col span={24} key={index} style={{margin: "7.5px auto", marginBottom: "15px"}}>
-                                    <div>
-                                        {windowSize.width > 768 ? (
-                                            <Item title={item.title} description={item.contentSnippet}
-                                                  imageUrl={imageUrl}
-                                                  newsUrl={item.link.replace("https://dantri.com.vn/", "")}
-                                                  style={{width: "100%", height: "100%"}} styleBody={""} col1={6}
-                                                  col2={18}/>
-                                        ) : (
-                                            <Item title={item.title} description={item.contentSnippet}
-                                                  imageUrl={imageUrl}
-                                                  newsUrl={item.link.replace("https://dantri.com.vn/", "")}
-                                                  style={{width: "100%", height: "100%"}} styleBody={""} col1={9}
-                                                  col2={15}/>
+                {currentArticles.map((item: any, index: number) => {
+                    const image = parser.parseFromString(item.content, 'text/html')
+                        .querySelector('img')?.getAttribute('src') || "";
+                    return (
+                        <Col span={24} key={index} style={{marginBottom: "15px"}}>
+                            <Item
+                                title={item.title}
+                                description={item.contentSnippet}
+                                imageUrl={image}
+                                newsUrl={item.link.replace("https://dantri.com.vn/", "")}
+                                style={{width: "100%", height: "100%"}}
+                                styleBody={{}}
+                                col1={isSmallScreen ? 9 : 6}
+                                col2={isSmallScreen ? 15 : 18}
+                            />
+                        </Col>
+                    );
+                })}
+            </Row>
 
-                                        )}
-                                    </div>
-                                </Col>
-                            );
-                        })
-                    ) : (
-                        feed.slice(5).map((item: any, index: any) => {
-                            let imageUrl: any = "";
-                            const doc = parser.parseFromString(item.content, 'text/html');
-                            const imgElement = doc.querySelector('img');
-                            if (imgElement) {
-                                imageUrl = imgElement.getAttribute('src');
-                            }
-                            return (
-                                <Col span={24} key={index} style={{margin: "7.5px auto", marginBottom: "15px"}}>
-                                    <div>
-                                        {windowSize.width > 768 ? (
-                                            <Item title={item.title} description={item.contentSnippet}
-                                                  imageUrl={imageUrl}
-                                                  newsUrl={item.link.replace("https://dantri.com.vn/", "")}
-                                                  style={{width: "100%", height: "100%"}} styleBody={""} col1={6}
-                                                  col2={18}/>
-                                        ) : (
-                                            <Item title={item.title} description={item.contentSnippet}
-                                                  imageUrl={imageUrl}
-                                                  newsUrl={item.link.replace("https://dantri.com.vn/", "")}
-                                                  style={{width: "100%", height: "100%"}} styleBody={""} col1={9}
-                                                  col2={15}/>
-
-                                        )}
-                                    </div>
-                                </Col>
-                            );
-                        })
-                    )
-
-                }
+            {/* 🟢 Phân trang */}
+            <Row justify="center" style={{margin: "20px 0"}}>
+                <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={paginatedArticles.length}
+                    onChange={setCurrentPage}
+                    showSizeChanger={false}
+                />
             </Row>
         </WrapperContain>
-
     );
 }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import AuthModal from '../../page/LoginAndResigter/AuthModal';
-
+import { useTranslation } from "react-i18next";
 interface Comment {
     userName: string;
     content: string;
@@ -12,7 +12,7 @@ const CommentBox = ({ articleId }: { articleId: string }) => {
     const [comments, setComments] = useState<Comment[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [authType, setAuthType] = useState<"login" | "register">("login");
-
+    const {t} = useTranslation();
     const { user } = useAuth();
 
     // Load bình luận từ localStorage mỗi khi articleId thay đổi
@@ -60,7 +60,7 @@ const CommentBox = ({ articleId }: { articleId: string }) => {
 
     return (
         <div style={{ marginTop: 40, padding: 20, borderTop: "2px solid #ddd" }}>
-            <h2 style={{ marginBottom: 20, color: "#0E6830" }}>💬 Bình luận bài viết</h2>
+            <h2 style={{ marginBottom: 20, color: "#0E6830" }}>{t("binh-luan-bai-viet")}</h2>
             <textarea
                 style={{
                     width: "100%",
@@ -71,7 +71,7 @@ const CommentBox = ({ articleId }: { articleId: string }) => {
                     fontSize: 16,
                     resize: "none"
                 }}
-                placeholder="Viết bình luận của bạn..."
+                placeholder={t("viet-binh-luan-cua-ban")}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 onFocus={handleFocus}
@@ -90,7 +90,7 @@ const CommentBox = ({ articleId }: { articleId: string }) => {
                 }}
                 onClick={handlePostComment}
             >
-                Gửi bình luận
+                {t("gui-binh-luan")}
             </button>
 
             {/* Modal đăng nhập */}
@@ -103,7 +103,7 @@ const CommentBox = ({ articleId }: { articleId: string }) => {
             {/* Hiển thị các bình luận */}
             <div style={{ marginTop: 30 }}>
                 {comments.length === 0 ? (
-                    <p style={{ fontStyle: "italic", color: "#888" }}>Chưa có bình luận nào.</p>
+                    <p style={{ fontStyle: "italic", color: "#888" }}>{t("chua-co-binh-luan")}</p>
                 ) : (
                     comments.map((cmt, idx) => (
                         <div key={idx} style={{

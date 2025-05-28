@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './style.css';
 import CommentBox from "../../components/Comment/CommentBox";
+import { useTranslation } from 'react-i18next';
 
 export async function loadUrl({ params }: any) {
     const { category, articleSlug } = params;
@@ -19,6 +20,7 @@ export async function loadUrl({ params }: any) {
 }
 
 const DetailPage = () => {
+    const { t } = useTranslation();
     const parser = new DOMParser();
     const data: any = useLoaderData();
     const url = `https://dantri.com.vn${data[0]}`;
@@ -53,44 +55,28 @@ const DetailPage = () => {
         setFeed();
     }, []);
 
-    let toUrl = "/category";
-    switch (cateName) {
-        case "Trang chủ":
-            toUrl += "/trang-chu";
-            break;
-        case "Kinh doanh":
-            toUrl += "/kinh-doanh";
-            break;
-        case "Xã hội":
-            toUrl = "/xa-hoi";
-            break;
-        case "Thế giới":
-            toUrl = "/the-gioi";
-            break;
-        case "Giải trí":
-            toUrl = "/giai-tri";
-            break;
-        case "Bất động sản":
-            toUrl = "/bat-dong-san";
-            break;
-        case "Thể thao":
-            toUrl = "/the-thao";
-            break;
-        default:
-            return url;
-    }
+    const categoryMap: { [key: string]: string } = {
+        "Trang chủ": "/trang-chu",
+        "Kinh doanh": "/kinh-doanh",
+        "Xã hội": "/xa-hoi",
+        "Thế giới": "/the-gioi",
+        "Giải trí": "/giai-tri",
+        "Bất động sản": "/bat-dong-san",
+        "Thể thao": "/the-thao",
+    };
+    let toUrl = `/category${categoryMap[cateName] || ''}`;
 
     return (
         <div style={{ backgroundColor: '#f2f2f2', padding: '20px 0' }}>
             <div style={{ maxWidth: 1200, margin: "auto", padding: "0 0 20px 15px" }}>
-                <Link style={{ textDecoration: "none", color: "black", fontSize: 30 }} to="/">Trang chủ</Link>
-                <Link style={{ textDecoration: "none", fontSize: 25 ,color:"#0E6830"}} to={toUrl}>{" > " + cateName}</Link>
+                <Link style={{ textDecoration: "none", color: "black", fontSize: 30 }} to="/">{t('categories.trang-chu')}</Link>
+                <Link style={{ textDecoration: "none", fontSize: 25 ,color:"#0E6830"}} to={toUrl}>{" > " + t(cateName)}</Link>
             </div>
             <div style={{ maxWidth: 1200, margin: 'auto', textAlign: 'start', padding: '0px 15px', backgroundColor: 'white' }}>
                 <Row>
                     <Col lg={17} md={24}>
                         <h1 className="big_title">{articleContent[0]}</h1>
-                        <h3 className="author_name">Tác giả: {articleContent[1]}</h3>
+                        <h3 className="author_name">{t('author')}: {articleContent[1]}</h3>
                         <div className="date" style={{fontStyle:"italic"}}>{articleContent[2]}</div>
                         {/* Đảm bảo nội dung HTML của bài viết được hiển thị đúng */}
                         <div dangerouslySetInnerHTML={{ __html: articleContent[3] }} />
@@ -98,7 +84,7 @@ const DetailPage = () => {
                     <Col lg={7} md={0} sm={0} xs={0} style={{ paddingTop: 15, paddingLeft: 10 }}>
                         <Row>
                             <Col span={24}>
-                                <Caption title="Tin liên quan" link={`category/${cateName.toLowerCase()}`} />
+                                    <Caption title={t('tin-lien-quan')} link={`category/${cateName.toLowerCase()}`} />
                                 {cateItem.slice(0, 4).map((item: any, index: any) => {
                                     let imageUrl: any = "";
                                     const doc = parser.parseFromString(item.content, 'text/html');
@@ -120,7 +106,7 @@ const DetailPage = () => {
 
                 <Row>
                     <Col lg={18}>
-                        <Caption title="Tin mới nhất" />
+                        <Caption title={t('moi-nhat')} />
                         {newFeed.slice(1, 10).map((item: any, index: any) => {
                             let imageUrl: any = "";
                             const doc = parser.parseFromString(item.content, 'text/html');
