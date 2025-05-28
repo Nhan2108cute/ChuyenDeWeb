@@ -9,13 +9,13 @@ const resources = {
     en: { translation: translationEN },
 };
 
-const savedLang = localStorage.getItem('lang') || 'vi'; // 📝 lấy từ localStorage
+const savedLang = localStorage.getItem('lang') || 'vi'; //lấy từ localStorage
 
 i18n
     .use(initReactI18next)
     .init({
         resources,
-        lng: savedLang, // 👉 thiết lập ngôn ngữ khởi tạo từ localStorage
+        lng: savedLang, //thiết lập ngôn ngữ khởi tạo từ localStorage
         fallbackLng: 'vi',
         interpolation: {
             escapeValue: false,

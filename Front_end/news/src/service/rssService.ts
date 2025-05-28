@@ -9,6 +9,6 @@ export const RSSFeed = async (rssUrl: any) => {
 
     } catch (error) {
         console.log(error);
-        throw error; // Throw error to be caught by the caller
+        throw error;
     }
 };

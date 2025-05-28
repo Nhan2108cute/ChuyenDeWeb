@@ -40,7 +40,6 @@ const RegisterPage = () => {
         e.preventDefault();
         if (validate()) {
             alert("Đăng ký thành công!");
-            // Gửi dữ liệu lên server hoặc xử lý tiếp
         }
     };
 

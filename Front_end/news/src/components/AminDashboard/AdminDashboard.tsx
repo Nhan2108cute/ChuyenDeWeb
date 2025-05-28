@@ -8,11 +8,9 @@ const AdminDashboard = () => {
     return (
         <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-6xl mx-auto">
-
-                {/* Giao diện mặc định khi chưa chọn gì */}
                 {activeTab === "none" && (
                     <>
-                        <h1 className="text-3xl font-bold mb-6">Trang quản trị Admin 👑</h1>
+                        <h1 className="text-3xl font-bold mb-6">Trang quản trị Admin</h1>
                         <div className="flex gap-4">
                             <button
                                 className="bg-[rgb(14,104,48)] hover:bg-green-800 text-white font-semibold px-6 py-3 rounded-2xl shadow-md transition duration-300"
@@ -31,7 +29,7 @@ const AdminDashboard = () => {
                     </>
                 )}
 
-                {/* Khi chọn Quản lý Người dùng */}
+                {/* Quản lý Người dùng */}
                 {activeTab === "users" && (
                     <>
                         <h2 className="text-2xl font-semibold mb-4"></h2>
@@ -45,7 +43,7 @@ const AdminDashboard = () => {
                     </>
                 )}
 
-                {/* Khi chọn Quản lý Bài Viết */}
+                {/* Quản lý Bài Viết */}
                 {activeTab === "posts" && (
                     <>
                         <h2 className="text-2xl font-semibold mb-4">Quản lý bài viết 📝</h2>

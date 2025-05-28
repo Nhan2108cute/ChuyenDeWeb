@@ -8,6 +8,6 @@ export const DetailFeed = async (artUrl: any) => {
 
     } catch (error) {
         console.log(error);
-        throw error; // Throw error to be caught by the caller
+        throw error;
     }
 };

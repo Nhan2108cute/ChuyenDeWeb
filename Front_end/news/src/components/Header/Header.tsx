@@ -9,7 +9,7 @@ const Header = () => {
     const { t, i18n } = useTranslation();
     const changeLanguage = (lng: 'vi' | 'en') => {
         i18n.changeLanguage(lng);
-        localStorage.setItem('lang', lng); // 💾 lưu lại vào localStorage
+        localStorage.setItem('lang', lng); // lưu vào localStorage
     };
     console.log(i18n);
     console.log(typeof i18n.changeLanguage);

@@ -10,7 +10,7 @@ function App() {
             <ScrollToTop />
             <Header />
             <Menu />
-            <Outlet /> {/* sẽ render các element được định nghĩa trong router.ts */}
+            <Outlet />
         </AuthProvider>
     );
 }

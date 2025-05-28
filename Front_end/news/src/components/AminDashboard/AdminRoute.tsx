@@ -8,8 +8,6 @@ const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     if (!user) {
         return <Navigate to="/login" replace />;
     }
-
-    // Đảm bảo user.accountType được kiểm tra đúng kiểu number
     if (user.accountType !== 0) {
         return <div style={{ padding: 16, color: "red", fontWeight: "bold" }}>
             Bạn không có quyền

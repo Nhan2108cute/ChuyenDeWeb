@@ -34,16 +34,15 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
 
                 message.success(t("login_success"));
 
-                // 👇 Thêm đoạn này để xử lý redirect theo từng loại tài khoản
                 const redirectPath = localStorage.getItem("redirectAfterLogin");
 
                 if (accountType === 0) {
                     navigate("/admin-dashboard"); // Admin thì vẫn về trang admin
                 } else {
-                    navigate(redirectPath || "/category/trang-chu"); // User và Premium quay lại nơi cũ hoặc về trang chủ mặc định
+                    navigate(redirectPath || "/category/trang-chu");
                 }
 
-                // ✅ Xoá redirect path để không ảnh hưởng lần sau
+                //  Xoá redirect path để không ảnh hưởng lần sau
                 localStorage.removeItem("redirectAfterLogin");
             } else {
                 await axios.post("http://localhost:8081/api/auth/register", {

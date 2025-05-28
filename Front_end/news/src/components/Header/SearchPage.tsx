@@ -9,15 +9,13 @@ interface NewsItem {
     imageUrl?: string;
     newsUrl?: string;
     link?: string;
-    content?: string;  // giả sử có trường content chứa HTML
+    content?: string;
 }
 
 interface Category {
     name: string;
     items: NewsItem[];
 }
-
-// Chuyển category thành slug
 function slugify(text: string) {
     return text
         .toLowerCase()
@@ -55,7 +53,7 @@ function SearchPage() {
 
     const allNews: (NewsItem & { category: string })[] = cates.flatMap((cate: Category) =>
         cate.items.map(item => {
-            // Lấy ảnh từ imageUrl hoặc parse từ content nếu imageUrl không có
+            // Lấy ảnh từ imageUrl
             let imageUrl = item.imageUrl?.trim() || '';
             if (!imageUrl && item.content) {
                 const parser = new DOMParser();
@@ -71,7 +69,7 @@ function SearchPage() {
             return {
                 ...item,
                 category: cate.name,
-                newsUrl: rawNewsUrl, // giữ nguyên url có category
+                newsUrl: rawNewsUrl,
                 imageUrl: imageUrl || 'https://via.placeholder.com/120x80?text=No+Image',
             };
         })
