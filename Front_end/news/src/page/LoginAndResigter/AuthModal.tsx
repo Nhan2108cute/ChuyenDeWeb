@@ -24,6 +24,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
                     username: values.username,
                     password: values.password,
                 });
+
                 const { username, accountType } = response.data;
 
                 login({
@@ -32,13 +33,19 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
                 });
 
                 message.success(t("login_success"));
+
+                // 👇 Thêm đoạn này để xử lý redirect theo từng loại tài khoản
+                const redirectPath = localStorage.getItem("redirectAfterLogin");
+
                 if (accountType === 0) {
-                    navigate("/admin-dashboard");  // Trang admin
+                    navigate("/admin-dashboard"); // Admin thì vẫn về trang admin
                 } else {
-                    navigate("/");   // Trang user thường hoặc premium
+                    navigate(redirectPath || "/category/trang-chu"); // User và Premium quay lại nơi cũ hoặc về trang chủ mặc định
                 }
-            }
-             else {
+
+                // ✅ Xoá redirect path để không ảnh hưởng lần sau
+                localStorage.removeItem("redirectAfterLogin");
+            } else {
                 await axios.post("http://localhost:8081/api/auth/register", {
                     username: values.username,
                     password: values.password,
@@ -59,6 +66,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
             message.error(errorMsg);
         }
     };
+
 
     const handleForgotPassword = () => {
         message.info(t("forgot_password_message"));

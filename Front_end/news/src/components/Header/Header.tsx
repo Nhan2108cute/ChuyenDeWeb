@@ -13,6 +13,7 @@ const Header = () => {
     };
     console.log(i18n);
     console.log(typeof i18n.changeLanguage);
+    localStorage.setItem("redirectAfterLogin", window.location.pathname);
 
     const [modalVisible, setModalVisible] = useState(false);
     const [authType, setAuthType] = useState<"login" | "register">("login");
