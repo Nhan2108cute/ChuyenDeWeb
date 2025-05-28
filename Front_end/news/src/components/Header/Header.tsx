@@ -7,7 +7,10 @@ import { useTranslation } from "react-i18next";
 
 const Header = () => {
     const { t, i18n } = useTranslation();
-
+    const changeLanguage = (lng: 'vi' | 'en') => {
+        i18n.changeLanguage(lng);
+        localStorage.setItem('lang', lng); // 💾 lưu lại vào localStorage
+    };
     console.log(i18n);
     console.log(typeof i18n.changeLanguage);
 
@@ -34,7 +37,6 @@ const Header = () => {
     const closeModal = () => {
         setModalVisible(false);
     };
-
     const handleLogout = () => {
         logout();
         message.success(t("logoutt"));
@@ -116,9 +118,39 @@ const Header = () => {
                 </button>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <button onClick={toggleLanguage} style={{ fontSize: 20, border: "none", background: "none", cursor: "pointer" }}>
-                    {i18n.language === "vi" ? "🇺🇸" : "🇻🇳"}
+            <div style={{display: "flex", alignItems: "center", gap: 12}}>
+                <button onClick={() => changeLanguage('vi')} title="Vietnamese"
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '5px',
+                            border: '1px solid #ccc',
+                            borderRadius: '5px',
+                            backgroundColor: 'white',
+                            width: '50px',
+                            height: '35px',
+                            marginRight: '10px',
+                            cursor: 'pointer',
+                        }}>
+                    <img src="https://flagcdn.com/w40/vn.png" alt="VI" width="30"/>
+                </button>
+                <button onClick={() => changeLanguage('en')}
+                        title="English"
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '5px',
+                            border: '1px solid #ccc',
+                            borderRadius: '5px',
+                            backgroundColor: 'white',
+                            width: '50px',
+                            height: '35px',
+                            marginRight: '10px',
+                            cursor: 'pointer', //
+                        }}>
+                    <img src="https://flagcdn.com/w40/us.png" alt="EN" width="30"/>
                 </button>
 
                 {user ? (
@@ -189,7 +221,7 @@ const Header = () => {
                 )}
             </div>
 
-            <AuthModal visible={modalVisible} onClose={closeModal} type={authType} />
+            <AuthModal visible={modalVisible} onClose={closeModal} type={authType}/>
         </header>
     );
 };

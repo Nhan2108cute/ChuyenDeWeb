@@ -25,10 +25,23 @@
   "categories.giai-tri": "Entertainment",
   "categories.bat-dong-san": "Real Estate",
   "categories.the-thao": "Sports",
-  "caption": {
-    "moi-nhat": "Latest News"
-  },
+  "Trang chủ": "Home",
+  "Kinh doanh": "Business",
+  "Xã hội": "Society",
+  "Thế giới": "The World",
+  "Giải trí": "Entertainment",
+  "Bất động sản": "Real Estate",
+  "Thể thao": "Sports",
+  "moi-nhat": "Latest News",
   "login_success": "Login sucessfully",
   "logoutt": "Logout sucessfully ",
-  "logout": "Logout"
+  "logout": "Logout",
+  "author": "Author",
+  "tin-lien-quan": "Related news",
+  "binh-luan-bai-viet": "\uD83D\uDCAC Comment in post",
+  "gui-binh-luan": "Submit a comment",
+  "chua-co-binh-luan": "No comments yet..",
+  "viet-binh-luan-cua-ban": "Write your comment..",
+  "caption.moi-nhat": "Latest News",
+  "register_success": "Register sucessfully"
 }

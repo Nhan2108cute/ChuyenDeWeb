@@ -25,11 +25,26 @@
   "categories.giai-tri": "Giải Trí",
   "categories.bat-dong-san": "Bất Động Sản",
   "categories.the-thao": "Thể Thao",
-  "caption": {
-    "moi-nhat": "Tin tức mới nhất"
-  },
+  "Trang chủ": "Trang chủ",
+  "Kinh doanh": "Kinh doanh",
+  "Xã hội": "Xã hội",
+  "Thế giới": "Thế giới",
+  "Giải trí": "Giải trí",
+  "Bất động sản": "Bất động sản",
+  "Thể thao": "Thể thao",
+  "moi-nhat": "Tin tức mới nhất",
   "login_success": "Đăng nhập thành công",
   "logoutt": "Đăng xuất thành công ",
-  "logout": "Đăng Xuất"
+  "logout": "Đăng Xuất",
+  "author": "Tác giả",
+  "tin-lien-quan": "Tin tức liên quan",
+  "binh-luan-bai-viet": "\uD83D\uDCAC Bình luận bài viết",
+  "gui-binh-luan": "Gửi bình luận",
+  "chua-co-binh-luan": "Chưa có bình luận nào..",
+  "gui-binh-luan-cua-ban": "Viết bình luận của bạn..",
+  "caption.moi-nhat": "Tin tức mới nhất",
+  "register_success": "Đăng ký thành công"
+
+
 }
 
