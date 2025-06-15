@@ -6,9 +6,32 @@
   <component name="ChangeListManager">
     <list default="true" id="da46d46a-aaf8-4e8c-b854-f6d81ec912e1" name="Changes" comment="fix detailPage">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.bin/browserslist" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/browserslist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.bin/browserslist.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.bin/browserslist.ps1" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/browserslist/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/browserslist/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/browserslist/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/browserslist/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/browserslist/browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/browserslist/browser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/browserslist/cli.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/browserslist/cli.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/browserslist/error.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/browserslist/error.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/browserslist/error.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/browserslist/error.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/browserslist/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/browserslist/index.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/browserslist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/browserslist/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/browserslist/node.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/browserslist/node.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/browserslist/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/browserslist/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/browserslist/parse.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/browserslist/parse.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/electron-to-chromium/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/electron-to-chromium/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/electron-to-chromium/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/electron-to-chromium/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/electron-to-chromium/chromium-versions.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/electron-to-chromium/chromium-versions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/electron-to-chromium/full-chromium-versions.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/electron-to-chromium/full-chromium-versions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/electron-to-chromium/full-chromium-versions.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/electron-to-chromium/full-chromium-versions.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/electron-to-chromium/full-versions.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/electron-to-chromium/full-versions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/electron-to-chromium/full-versions.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/electron-to-chromium/full-versions.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/electron-to-chromium/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/electron-to-chromium/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/electron-to-chromium/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/electron-to-chromium/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/electron-to-chromium/versions.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/electron-to-chromium/versions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/electron-to-chromium/versions.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/electron-to-chromium/versions.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +58,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "sangcs321"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Nhan2108cute/ChuyenDeWeb.git",
+    "accountId": "e77a3331-13e5-45fe-92e0-17976b2dbdd1"
+  }
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -54,7 +89,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/Project Front End Real",
+    "last_opened_file_path": "E:/CDWeb/ChuyenDeWeb",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -63,7 +98,7 @@
     "nodejs_package_manager_path": "npm",
     "npm.start.executor": "Run",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "ts.external.directory.path": "C:\\CD_WEB_Front_end\\ChuyenDeWeb\\Front_end\\news\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "E:\\CDWeb\\ChuyenDeWeb\\Front_end\\news\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -93,6 +128,13 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-WS-242.21829.149" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -119,6 +161,7 @@
       <workItem from="1747725636259" duration="3502000" />
       <workItem from="1747795266310" duration="15209000" />
       <workItem from="1747820375169" duration="1042000" />
+      <workItem from="1749955649664" duration="8251000" />
     </task>
     <task id="LOCAL-00001" summary="index">
       <option name="closed" value="true" />
