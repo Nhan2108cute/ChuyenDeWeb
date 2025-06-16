@@ -1,28 +1,35 @@
-import React, {useEffect, useState} from "react";
-import {Table, Button, Modal, Form, Input, message, Upload, Select} from "antd";
+import React, { useEffect, useState } from "react";
+import { Table, Button, Modal, Form, Input, message, Upload, Select } from "antd";
 import axios from "axios";
-import {UploadOutlined} from '@ant-design/icons';
-import {UploadFile} from "antd/lib";
+import { UploadOutlined } from '@ant-design/icons';
+import { UploadFile } from "antd/lib";
 
 interface Post {
     id: number;
     title: string;
-    content: string;
     author: string;
     createdAt: string;
+    imageId?: string;
+    contents: {
+        type: 'text' | 'image';
+        content: string;
+    }[];
 }
+
 interface ExtraField {
     id: number;
     type: 'text' | 'image';
 }
+
 export default function PostManagement() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingPost, setEditingPost] = useState<Post | null>(null);
     const [form] = Form.useForm();
-    const [fileLists, setFileLists] = useState<Record<number, UploadFile[]>>({}); // Định nghĩa kiểu cho fileLists với index là number
-    const [extraFields, setExtraFields] =useState<ExtraField[]>([]); // Lưu danh sách trường động
+    const [fileLists, setFileLists] = useState<Record<string | number, UploadFile[]>>({});
+    const [extraFields, setExtraFields] = useState<ExtraField[]>([]);
+
     useEffect(() => {
         fetchPosts();
     }, []);
@@ -30,7 +37,7 @@ export default function PostManagement() {
     const fetchPosts = async () => {
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:8080/api/posts");
+            const res = await axios.get("http://localhost:8081/api/articles");
             setPosts(res.data);
         } catch (error) {
             message.error("Lỗi khi tải danh sách bài viết");
@@ -42,19 +49,67 @@ export default function PostManagement() {
     const handleAdd = () => {
         setEditingPost(null);
         form.resetFields();
+        setExtraFields([]);
+        setFileLists({});
         setIsModalVisible(true);
     };
 
     const handleEdit = (post: Post) => {
         setEditingPost(post);
-        form.setFieldsValue(post);
         setIsModalVisible(true);
     };
+
+    useEffect(() => {
+        if (editingPost && isModalVisible) {
+            form.setFieldsValue({
+                author: editingPost.author,
+                title: editingPost.title,
+                content: editingPost.contents.find(c => c.type === 'text')?.content || '',
+            });
+
+            if (editingPost.imageId) {
+                setFileLists(prev => ({
+                    ...prev,
+                    main: [{
+                        uid: '-1',
+                        name: 'Ảnh đại diện',
+                        status: 'done',
+                        url: editingPost.imageId,
+                    }],
+                }));
+            }
+
+            const dynamicFields = editingPost.contents
+                .filter((c, index) => index > 0)
+                .map((c) => ({
+                    id: Date.now() + Math.random(),
+                    type: c.type,
+                }));
+
+            setExtraFields(dynamicFields);
+
+            dynamicFields.forEach((field, i) => {
+                if (field.type === 'text') {
+                    form.setFieldValue(`extra_${field.id}`, editingPost.contents[i + 1].content);
+                } else if (field.type === 'image') {
+                    setFileLists((prev) => ({
+                        ...prev,
+                        [field.id]: [{
+                            uid: `-${field.id}`,
+                            name: 'Ảnh bổ sung',
+                            status: 'done',
+                            url: editingPost.contents[i + 1].content,
+                        }],
+                    }));
+                }
+            });
+        }
+    }, [editingPost, isModalVisible]);
 
     const handleDelete = async (id: number) => {
         if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này?")) {
             try {
-                await axios.delete(`http://localhost:8080/api/posts/${id}`);
+                await axios.delete(`http://localhost:8081/api/auth/articles/${id}`);
                 message.success("Xóa bài viết thành công");
                 fetchPosts();
             } catch (error) {
@@ -62,32 +117,29 @@ export default function PostManagement() {
             }
         }
     };
-    // Xử lý upload file lên
+
     const handleUpload = async (file: File) => {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('upload_preset', ''); // Thay bằng upload preset
-
         try {
-            const response = await axios.post(
-                `https://localhost:8081/api/images/upload`, // Thay bằng cloud name
-                formData
-            );
+            const response = await axios.post("http://localhost:8081/api/images/upload", formData);
             return response.data.secure_url;
         } catch (error) {
             message.error('Tải hình ảnh thất bại!');
             throw error;
         }
     };
+
     const onFinish = async (values: any) => {
         console.log('Received values:', values);
+        // TODO: Submit form for create or update
     };
 
     const columns = [
-        {title: "ID", dataIndex: "id", key: "id"},
-        {title: "Tiêu đề", dataIndex: "title", key: "title"},
-        {title: "Tác giả", dataIndex: "author", key: "author"},
-        {title: "Ngày tạo", dataIndex: "createdAt", key: "createdAt"},
+        { title: "ID", dataIndex: "id", key: "id" },
+        { title: "Tiêu đề", dataIndex: "title", key: "title" },
+        { title: "Tác giả", dataIndex: "author", key: "author" },
+        { title: "Ngày tạo", dataIndex: "createdAt", key: "createdAt" },
         {
             title: "Hành động",
             key: "action",
@@ -98,31 +150,27 @@ export default function PostManagement() {
                 </div>
             ),
         },
-
     ];
 
-    // Thêm trường input mới
     const addField = (type: 'text' | 'image') => {
         const newField = {
-            id: Date.now(), // ID duy nhất cho trường
-            type, // 'text' hoặc 'image'
+            id: Date.now(),
+            type,
         };
         setExtraFields([...extraFields, newField]);
     };
-    // Xóa trường input
+
     const removeField = (id: number) => {
         setExtraFields(extraFields.filter((field) => field.id !== id));
-        setFileLists((prev) => {
+        setFileLists(prev => {
             const newFileLists = { ...prev };
-            if (newFileLists.hasOwnProperty(id)) {
-                delete newFileLists[id]; // Xóa key nếu tồn tại
-            }
+            delete newFileLists[id];
             return newFileLists;
         });
     };
-    // Xử lý thay đổi file
+
     const handleFileChange = (fieldId: string | number) => ({ fileList }: { fileList: any[] }) => {
-        setFileLists((prev) => ({
+        setFileLists(prev => ({
             ...prev,
             [fieldId]: fileList,
         }));
@@ -133,61 +181,47 @@ export default function PostManagement() {
             <Button type="primary" onClick={handleAdd} className="mb-4">
                 Thêm Bài Viết
             </Button>
-            <Table dataSource={posts} columns={columns} rowKey="id" loading={loading}/>
+            <Table dataSource={posts} columns={columns} rowKey="id" loading={loading} />
 
             <Modal
                 title={editingPost ? "Sửa Bài Viết" : "Thêm Bài Viết"}
-                visible={isModalVisible}
+                open={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
                 footer={null}
             >
                 <Form form={form} layout="vertical" onFinish={onFinish}>
-                    <Form.Item
-                        name="author"
-                        label="Tác giả"
-                        rules={[{required: true, message: "Vui lòng nhập tác giả!"}]}
-                    >
-                        <Input/>
+                    <Form.Item name="author" label="Tác giả" rules={[{ required: true, message: "Vui lòng nhập tác giả!" }]}>
+                        <Input />
                     </Form.Item>
-                    <Form.Item
-                        name="title"
-                        label="Tiêu đề"
-                        rules={[{required: true, message: "Vui lòng nhập tiêu đề!"}]}
-                    >
-                        <Input/>
+
+                    <Form.Item name="title" label="Tiêu đề" rules={[{ required: true, message: "Vui lòng nhập tiêu đề!" }]}>
+                        <Input />
                     </Form.Item>
-                    <Form.Item
-                        label="Hình ảnh"
-                        name="image"
-                    >
+
+                    <Form.Item name="image" label="Hình ảnh">
                         <Upload
-                            beforeUpload={() => false} // Ngăn upload tự động, xử lý thủ công trong handleSubmit
-                            // fileList={fileLists['main'] || []}
+                            beforeUpload={() => false}
                             onChange={handleFileChange('main')}
                             accept="image/*"
+                            fileList={fileLists['main'] || []}
                             listType="picture"
                         >
-                            <Button icon={<UploadOutlined/>}>Chọn hình ảnh</Button>
+                            <Button icon={<UploadOutlined />}>Chọn hình ảnh</Button>
                         </Upload>
                     </Form.Item>
-                    <Form.Item
-                        name="content"
-                        label="Nội dung"
-                        rules={[{required: true, message: "Vui lòng nhập nội dung!"}]}
-                    >
-                        <Input.TextArea rows={4}/>
+
+                    <Form.Item name="content" label="Nội dung" rules={[{ required: true, message: "Vui lòng nhập nội dung!" }]}>
+                        <Input.TextArea rows={4} />
                     </Form.Item>
-                    {/* Render các trường động */}
-                    {extraFields.map((field) => (
-                        <div
-                            // key={field.id}
-                            style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+
+                    {extraFields.map(field => (
+                        <div key={field.id} style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
                             <Form.Item
                                 name={`extra_${field.id}`}
                                 label={field.type === 'text' ? 'Đoạn văn bổ sung' : 'Hình ảnh bổ sung'}
                                 style={{ flex: 1, marginBottom: 0 }}
                             >
-                                {field?.type === 'text' ? (
+                                {field.type === 'text' ? (
                                     <Input.TextArea rows={4} />
                                 ) : (
                                     <Upload
@@ -201,18 +235,12 @@ export default function PostManagement() {
                                     </Upload>
                                 )}
                             </Form.Item>
-                            <Button
-                                type="link"
-                                danger
-                                onClick={() => removeField(field.id)}
-                                style={{ marginLeft: 8 }}
-                            >
+                            <Button type="link" danger onClick={() => removeField(field.id)} style={{ marginLeft: 8 }}>
                                 Xóa
                             </Button>
                         </div>
                     ))}
 
-                    {/* Nút thêm trường */}
                     <Form.Item>
                         <Select
                             style={{ width: 200, marginBottom: 16 }}
@@ -223,6 +251,7 @@ export default function PostManagement() {
                             <Select.Option value="image">Hình ảnh</Select.Option>
                         </Select>
                     </Form.Item>
+
                     <Form.Item>
                         <Button type="primary" htmlType="submit" block>
                             {editingPost ? "Cập nhật" : "Thêm"}
