@@ -31,6 +31,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ visible, onClose, type }) => {
                     username: values.username,
                     accountType,
                 });
+                const token = response.data.token;
+                sessionStorage.setItem("token",token);
+                console.log(token)
 
                 message.success(t("login_success"));
 

@@ -15,7 +15,10 @@ const UserManagement = () => {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:8081/api/auth/users");
+            const token = sessionStorage.getItem("token")
+            const res = await axios.get("http://localhost:8081/api/auth/users",{
+                headers:{Authorization: `Bearer ${token}`}
+            });
             setUsers(res.data);
         } catch (error) {
             message.error("Lấy danh sách người dùng thất bại!");

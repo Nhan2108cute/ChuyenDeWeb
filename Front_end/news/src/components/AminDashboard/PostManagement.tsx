@@ -35,9 +35,13 @@ export default function PostManagement() {
     }, []);
 
     const fetchPosts = async () => {
+
         setLoading(true);
         try {
-            const res = await axios.get("http://localhost:8081/api/articles");
+            const token = sessionStorage.getItem("token");
+            const res = await axios.get("http://localhost:8081/api/articles",{
+                headers:{Authorization: `Bearer ${token}`}
+            });
             setPosts(res.data);
         } catch (error) {
             message.error("Lỗi khi tải danh sách bài viết");
@@ -109,7 +113,11 @@ export default function PostManagement() {
     const handleDelete = async (id: number) => {
         if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này?")) {
             try {
-                await axios.delete(`http://localhost:8081/api/auth/articles/${id}`);
+                const token = sessionStorage.getItem("token");
+                await axios.delete(`http://localhost:8081/api/articles/${id}`,{
+                    headers:{Authorization: `Bearer ${token}`}
+                });
+
                 message.success("Xóa bài viết thành công");
                 fetchPosts();
             } catch (error) {
@@ -119,11 +127,14 @@ export default function PostManagement() {
     };
 
     const handleUpload = async (file: File) => {
+        const token = sessionStorage.getItem("token")
         const formData = new FormData();
         formData.append('file', file);
         try {
-            const response = await axios.post("http://localhost:8081/api/images/upload", formData);
-            return response.data.secure_url;
+            const response = await axios.post("http://localhost:8081/api/images/upload", formData,{
+                headers:{Authorization: `Bearer ${token}`}
+            });
+            return response.data.url;
         } catch (error) {
             message.error('Tải hình ảnh thất bại!');
             throw error;
@@ -131,9 +142,75 @@ export default function PostManagement() {
     };
 
     const onFinish = async (values: any) => {
-        console.log('Received values:', values);
-        // TODO: Submit form for create or update
+        try {
+            const token = sessionStorage.getItem("token");
+            let imageId = editingPost?.imageId || null;
+
+            // ✅ Nếu có file ảnh chính mới → upload
+            if (fileLists['main'] && fileLists['main'][0]?.originFileObj) {
+                imageId = await handleUpload(fileLists['main'][0].originFileObj);
+            }
+
+            // ✅ Chuẩn bị contents: nội dung chính + các nội dung bổ sung
+            const contents: { type: 'text' | 'image'; content: string }[] = [];
+
+            // Nội dung chính (không bỏ trống)
+            if (values.content?.trim()) {
+                contents.push({ type: 'text', content: values.content.trim() });
+            }
+
+            // Nội dung bổ sung
+            for (const field of extraFields) {
+                const key = `extra_${field.id}`;
+                if (field.type === 'text') {
+                    const textContent = values[key]?.trim();
+                    if (textContent) {
+                        contents.push({ type: 'text', content: textContent });
+                    }
+                } else if (field.type === 'image') {
+                    const file = fileLists[field.id]?.[0]?.originFileObj;
+                    if (file) {
+                        const imageUrl = await handleUpload(file);
+                        contents.push({ type: 'image', content: imageUrl });
+                    }
+                }
+            }
+
+            // ✅ Chuẩn bị dữ liệu gửi
+            const payload = {
+                title: values.title?.trim(),
+                author: values.author?.trim(),
+                imageId: imageId || null,
+                contents
+            };
+
+            console.log("📦 Gửi lên server:", payload);
+
+            // ✅ Gửi API
+            if (editingPost) {
+                await axios.put(`http://localhost:8081/api/articles/${editingPost.id}`, payload,{
+                    headers:{Authorization: `Bearer ${token}`}
+                });
+                message.success("Cập nhật thành công");
+            } else {
+                await axios.post("http://localhost:8081/api/articles", payload,{
+                    headers:{Authorization: `Bearer ${token}`}
+                });
+                message.success("Thêm bài viết thành công");
+            }
+
+            // ✅ Reset giao diện
+            setIsModalVisible(false);
+            fetchPosts();
+
+        } catch (err) {
+            console.error("❌ Lỗi khi gửi:", err);
+            message.error("Có lỗi khi lưu bài viết!");
+        }
     };
+
+
+
 
     const columns = [
         { title: "ID", dataIndex: "id", key: "id" },
